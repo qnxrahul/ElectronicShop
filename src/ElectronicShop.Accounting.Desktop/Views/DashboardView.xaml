@@ -1,0 +1,327 @@
+<UserControl x:Class="ElectronicShop.Accounting.Desktop.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Padding="6">
+        <StackPanel>
+            <TextBlock Style="{StaticResource PageTitleStyle}"
+                       Text="Dashboard" />
+            <TextBlock Margin="0,4,0,16"
+                       Style="{StaticResource PageSubtitleStyle}"
+                       Text="Welcome back, Harshit" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.2*" />
+                    <ColumnDefinition Width="1.2*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <ItemsControl ItemsSource="{Binding SummaryCards}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="3" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,12,12"
+                                        Style="{StaticResource SurfaceCardStyle}"
+                                        Background="{Binding AccentColor}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel>
+                                            <TextBlock FontSize="12"
+                                                       Foreground="#4E5561"
+                                                       FontWeight="SemiBold"
+                                                       Text="{Binding Title}" />
+                                            <TextBlock Margin="0,8,0,0"
+                                                       FontSize="35"
+                                                       FontWeight="Bold"
+                                                       Text="{Binding Amount, StringFormat={}{0:C0}}" />
+                                            <TextBlock Margin="0,8,0,0"
+                                                       Foreground="#49515D"
+                                                       FontWeight="SemiBold"
+                                                       Text="{Binding ChangePercent, StringFormat=+{0}%}" />
+                                        </StackPanel>
+                                        <Border Grid.Column="1"
+                                                Width="34"
+                                                Height="34"
+                                                CornerRadius="8"
+                                                Background="#F8F9FB">
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       FontSize="16"
+                                                       Foreground="#2A2F35"
+                                                       Text="{Binding IconGlyph}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Border Margin="0,0,12,12"
+                            Style="{StaticResource SurfaceCardStyle}">
+                        <StackPanel>
+                            <DockPanel LastChildFill="False">
+                                <StackPanel DockPanel.Dock="Left">
+                                    <TextBlock FontSize="26"
+                                               FontWeight="Bold"
+                                               Text="Monthly Sales Trend" />
+                                    <TextBlock Margin="0,2,0,0"
+                                               Foreground="#6C737E"
+                                               Text="Sales and profit overview" />
+                                </StackPanel>
+                                <Button DockPanel.Dock="Right"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Padding="12,7"
+                                        Content="View All" />
+                            </DockPanel>
+
+                            <Border Height="255"
+                                    Margin="0,16,0,0"
+                                    Background="#F8F9FB"
+                                    BorderBrush="#ECEEF2"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="16">
+                                <ItemsControl ItemsSource="{Binding MonthlySales}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Columns="12" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="2,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Border Grid.Row="0"
+                                                        Width="16"
+                                                        Height="{Binding BarHeight}"
+                                                        VerticalAlignment="Bottom"
+                                                        HorizontalAlignment="Center"
+                                                        CornerRadius="8"
+                                                        Background="#17191E" />
+                                                <TextBlock Grid.Row="1"
+                                                           Margin="0,8,0,0"
+                                                           HorizontalAlignment="Center"
+                                                           Foreground="#4E5560"
+                                                           Text="{Binding Month}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Margin="0,0,12,0"
+                            Style="{StaticResource SurfaceCardStyle}">
+                        <DockPanel LastChildFill="True">
+                            <StackPanel DockPanel.Dock="Top"
+                                        Orientation="Horizontal"
+                                        Margin="0,0,0,12">
+                                <TextBlock FontSize="25"
+                                           FontWeight="Bold"
+                                           Text="Recent Invoices" />
+                                <TextBlock Margin="10,9,0,0"
+                                           Foreground="#6C737E"
+                                           Text="Latest sales transactions" />
+                            </StackPanel>
+
+                            <DataGrid Style="{StaticResource DataGridStyle}"
+                                      IsReadOnly="True"
+                                      ItemsSource="{Binding RecentInvoices}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="INVOICE ID" Binding="{Binding InvoiceNumber}" Width="1.25*" />
+                                    <DataGridTextColumn Header="CUSTOMER" Binding="{Binding CustomerName}" Width="1.45*" />
+                                    <DataGridTextColumn Header="DATE" Binding="{Binding InvoiceDate}" Width="1*" />
+                                    <DataGridTextColumn Header="AMOUNT" Binding="{Binding Amount, StringFormat={}{0:C0}}" Width="1*" />
+                                    <DataGridTextColumn Header="STATUS" Binding="{Binding Status}" Width="0.8*" />
+                                    <DataGridTextColumn Header="PAYMENT" Binding="{Binding PaymentType}" Width="0.7*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Border Margin="0,0,0,12"
+                            Style="{StaticResource SurfaceCardStyle}"
+                            Background="#1B1D22"
+                            BorderThickness="0">
+                        <StackPanel>
+                            <TextBlock Foreground="#FFFFFF"
+                                       FontSize="28"
+                                       FontWeight="Bold"
+                                       Text="Quick Actions" />
+
+                            <StackPanel Margin="0,14,0,0">
+                                <Border Margin="0,0,0,10"
+                                        Padding="14"
+                                        Background="#FFFFFF"
+                                        CornerRadius="10">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Left">
+                                            <TextBlock FontWeight="Bold"
+                                                       Text="New Sale" />
+                                            <TextBlock Foreground="#757B84"
+                                                       Text="Create invoice" />
+                                        </StackPanel>
+                                        <Button DockPanel.Dock="Right"
+                                                Width="34"
+                                                Height="30"
+                                                Style="{StaticResource PrimaryButtonStyle}"
+                                                Content="→" />
+                                    </DockPanel>
+                                </Border>
+
+                                <Border Margin="0,0,0,10"
+                                        Padding="14"
+                                        Background="#FFFFFF"
+                                        CornerRadius="10">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Left">
+                                            <TextBlock FontWeight="Bold"
+                                                       Text="New Purchase" />
+                                            <TextBlock Foreground="#757B84"
+                                                       Text="Add bill" />
+                                        </StackPanel>
+                                        <Button DockPanel.Dock="Right"
+                                                Width="34"
+                                                Height="30"
+                                                Style="{StaticResource PrimaryButtonStyle}"
+                                                Content="→" />
+                                    </DockPanel>
+                                </Border>
+
+                                <Border Padding="14"
+                                        Background="#FFFFFF"
+                                        CornerRadius="10">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Left">
+                                            <TextBlock FontWeight="Bold"
+                                                       Text="Add Item" />
+                                            <TextBlock Foreground="#757B84"
+                                                       Text="Manage stock" />
+                                        </StackPanel>
+                                        <Button DockPanel.Dock="Right"
+                                                Width="34"
+                                                Height="30"
+                                                Style="{StaticResource PrimaryButtonStyle}"
+                                                Content="→" />
+                                    </DockPanel>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Margin="0,0,0,12"
+                            Style="{StaticResource SurfaceCardStyle}">
+                        <DockPanel LastChildFill="False">
+                            <TextBlock DockPanel.Dock="Left"
+                                       FontSize="26"
+                                       FontWeight="Bold"
+                                       Text="Top Selling Items" />
+                            <Button DockPanel.Dock="Right"
+                                    Padding="10,6"
+                                    Style="{StaticResource OutlineButtonStyle}"
+                                    Content="View All" />
+                        </DockPanel>
+                        <ItemsControl Margin="0,12,0,0"
+                                      ItemsSource="{Binding TopSellingItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,8"
+                                            Padding="10"
+                                            BorderBrush="#ECEEF2"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                        <DockPanel>
+                                            <Border DockPanel.Dock="Left"
+                                                    Width="30"
+                                                    Height="30"
+                                                    Background="#1B1D22"
+                                                    CornerRadius="7">
+                                                <TextBlock HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="#FFFFFF"
+                                                           FontWeight="Bold"
+                                                           Text="{Binding Rank, StringFormat={}#{0}}" />
+                                            </Border>
+                                            <StackPanel Margin="10,0,0,0"
+                                                        DockPanel.Dock="Left">
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="{Binding ItemName}" />
+                                                <TextBlock FontSize="12"
+                                                           Foreground="#777D86"
+                                                           Text="{Binding UnitsSold, StringFormat={}{0} units sold}" />
+                                            </StackPanel>
+                                            <TextBlock DockPanel.Dock="Right"
+                                                       VerticalAlignment="Center"
+                                                       FontWeight="Bold"
+                                                       Text="{Binding Revenue, StringFormat={}{0:C0}}" />
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <Border Style="{StaticResource SurfaceCardStyle}">
+                        <DockPanel LastChildFill="False">
+                            <TextBlock DockPanel.Dock="Left"
+                                       FontSize="26"
+                                       FontWeight="Bold"
+                                       Text="Branch Revenue" />
+                            <Button DockPanel.Dock="Right"
+                                    Padding="10,6"
+                                    Style="{StaticResource OutlineButtonStyle}"
+                                    Content="Weekly" />
+                        </DockPanel>
+                        <ItemsControl Margin="0,12,0,0"
+                                      ItemsSource="{Binding BranchRevenueItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,10"
+                                            Padding="12"
+                                            Background="{Binding AccentColor}"
+                                            CornerRadius="10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       FontWeight="SemiBold"
+                                                       Text="{Binding BranchName}" />
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock HorizontalAlignment="Right"
+                                                           FontSize="26"
+                                                           FontWeight="Bold"
+                                                           Text="{Binding Revenue, StringFormat={}{0:C0}}" />
+                                                <TextBlock HorizontalAlignment="Right"
+                                                           Foreground="#3E7F47"
+                                                           FontWeight="SemiBold"
+                                                           Text="{Binding ChangePercent, StringFormat=+{0}%}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
