@@ -227,98 +227,102 @@
 
                     <Border Margin="0,0,0,12"
                             Style="{StaticResource SurfaceCardStyle}">
-                        <DockPanel LastChildFill="False">
-                            <TextBlock DockPanel.Dock="Left"
-                                       FontSize="26"
-                                       FontWeight="Bold"
-                                       Text="Top Selling Items" />
-                            <Button DockPanel.Dock="Right"
-                                    Padding="10,6"
-                                    Style="{StaticResource OutlineButtonStyle}"
-                                    Content="View All" />
-                        </DockPanel>
-                        <ItemsControl Margin="0,12,0,0"
-                                      ItemsSource="{Binding TopSellingItems}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Margin="0,0,0,8"
-                                            Padding="10"
-                                            BorderBrush="#ECEEF2"
-                                            BorderThickness="1"
-                                            CornerRadius="8">
-                                        <DockPanel>
-                                            <Border DockPanel.Dock="Left"
-                                                    Width="30"
-                                                    Height="30"
-                                                    Background="#1B1D22"
-                                                    CornerRadius="7">
-                                                <TextBlock HorizontalAlignment="Center"
+                        <StackPanel>
+                            <DockPanel LastChildFill="False">
+                                <TextBlock DockPanel.Dock="Left"
+                                           FontSize="26"
+                                           FontWeight="Bold"
+                                           Text="Top Selling Items" />
+                                <Button DockPanel.Dock="Right"
+                                        Padding="10,6"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Content="View All" />
+                            </DockPanel>
+                            <ItemsControl Margin="0,12,0,0"
+                                          ItemsSource="{Binding TopSellingItems}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,0,0,8"
+                                                Padding="10"
+                                                BorderBrush="#ECEEF2"
+                                                BorderThickness="1"
+                                                CornerRadius="8">
+                                            <DockPanel>
+                                                <Border DockPanel.Dock="Left"
+                                                        Width="30"
+                                                        Height="30"
+                                                        Background="#1B1D22"
+                                                        CornerRadius="7">
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="#FFFFFF"
+                                                               FontWeight="Bold"
+                                                               Text="{Binding Rank, StringFormat={}#{0}}" />
+                                                </Border>
+                                                <StackPanel Margin="10,0,0,0"
+                                                            DockPanel.Dock="Left">
+                                                    <TextBlock FontWeight="SemiBold"
+                                                               Text="{Binding ItemName}" />
+                                                    <TextBlock FontSize="12"
+                                                               Foreground="#777D86"
+                                                               Text="{Binding UnitsSold, StringFormat={}{0} units sold}" />
+                                                </StackPanel>
+                                                <TextBlock DockPanel.Dock="Right"
                                                            VerticalAlignment="Center"
-                                                           Foreground="#FFFFFF"
                                                            FontWeight="Bold"
-                                                           Text="{Binding Rank, StringFormat={}#{0}}" />
-                                            </Border>
-                                            <StackPanel Margin="10,0,0,0"
-                                                        DockPanel.Dock="Left">
-                                                <TextBlock FontWeight="SemiBold"
-                                                           Text="{Binding ItemName}" />
-                                                <TextBlock FontSize="12"
-                                                           Foreground="#777D86"
-                                                           Text="{Binding UnitsSold, StringFormat={}{0} units sold}" />
-                                            </StackPanel>
-                                            <TextBlock DockPanel.Dock="Right"
-                                                       VerticalAlignment="Center"
-                                                       FontWeight="Bold"
-                                                       Text="{Binding Revenue, StringFormat={}{0:C0}}" />
-                                        </DockPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                                           Text="{Binding Revenue, StringFormat={}{0:C0}}" />
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </Border>
 
                     <Border Style="{StaticResource SurfaceCardStyle}">
-                        <DockPanel LastChildFill="False">
-                            <TextBlock DockPanel.Dock="Left"
-                                       FontSize="26"
-                                       FontWeight="Bold"
-                                       Text="Branch Revenue" />
-                            <Button DockPanel.Dock="Right"
-                                    Padding="10,6"
-                                    Style="{StaticResource OutlineButtonStyle}"
-                                    Content="Weekly" />
-                        </DockPanel>
-                        <ItemsControl Margin="0,12,0,0"
-                                      ItemsSource="{Binding BranchRevenueItems}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Margin="0,0,0,10"
-                                            Padding="12"
-                                            Background="{Binding AccentColor}"
-                                            CornerRadius="10">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock VerticalAlignment="Center"
-                                                       FontWeight="SemiBold"
-                                                       Text="{Binding BranchName}" />
-                                            <StackPanel Grid.Column="1">
-                                                <TextBlock HorizontalAlignment="Right"
-                                                           FontSize="26"
-                                                           FontWeight="Bold"
-                                                           Text="{Binding Revenue, StringFormat={}{0:C0}}" />
-                                                <TextBlock HorizontalAlignment="Right"
-                                                           Foreground="#3E7F47"
+                        <StackPanel>
+                            <DockPanel LastChildFill="False">
+                                <TextBlock DockPanel.Dock="Left"
+                                           FontSize="26"
+                                           FontWeight="Bold"
+                                           Text="Branch Revenue" />
+                                <Button DockPanel.Dock="Right"
+                                        Padding="10,6"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Content="Weekly" />
+                            </DockPanel>
+                            <ItemsControl Margin="0,12,0,0"
+                                          ItemsSource="{Binding BranchRevenueItems}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,0,0,10"
+                                                Padding="12"
+                                                Background="{Binding AccentColor}"
+                                                CornerRadius="10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock VerticalAlignment="Center"
                                                            FontWeight="SemiBold"
-                                                           Text="{Binding ChangePercent, StringFormat=+{0}%}" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                                           Text="{Binding BranchName}" />
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock HorizontalAlignment="Right"
+                                                               FontSize="26"
+                                                               FontWeight="Bold"
+                                                               Text="{Binding Revenue, StringFormat={}{0:C0}}" />
+                                                    <TextBlock HorizontalAlignment="Right"
+                                                               Foreground="#3E7F47"
+                                                               FontWeight="SemiBold"
+                                                               Text="{Binding ChangePercent, StringFormat=+{0}%}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </Border>
                 </StackPanel>
             </Grid>
