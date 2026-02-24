@@ -136,11 +136,13 @@
         <Setter Property="CanUserResizeRows" Value="False" />
         <Setter Property="CanUserSortColumns" Value="False" />
         <Setter Property="SelectionMode" Value="Single" />
-        <Setter Property="GridLinesVisibility" Value="None" />
+        <Setter Property="GridLinesVisibility" Value="All" />
+        <Setter Property="HorizontalGridLinesBrush" Value="#FFFFFF" />
+        <Setter Property="VerticalGridLinesBrush" Value="#FFFFFF" />
         <Setter Property="RowHeaderWidth" Value="0" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="#FFFFFF" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontFamily" Value="{StaticResource TableFontFamily}" />
         <Setter Property="FontSize" Value="13" />
@@ -160,8 +162,8 @@
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="TextBlock.LineHeight" Value="13" />
         <Setter Property="TextBlock.LineStackingStrategy" Value="BlockLineHeight" />
-        <Setter Property="BorderBrush" Value="#181A1F" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="#E3E5E9" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <Style TargetType="DataGridRow">
@@ -180,7 +182,9 @@
 
     <Style TargetType="DataGridCell">
         <Setter Property="Padding" Value="14,0" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="#FFFFFF" />
+        <Setter Property="BorderBrush" Value="#E3E5E9" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="#202329" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource TableFontFamily}" />
@@ -188,5 +192,10 @@
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="TextBlock.LineHeight" Value="13" />
         <Setter Property="TextBlock.LineStackingStrategy" Value="BlockLineHeight" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#EEF2F7" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
