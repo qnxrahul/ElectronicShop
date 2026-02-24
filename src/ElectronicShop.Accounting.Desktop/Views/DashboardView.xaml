@@ -146,7 +146,21 @@
                                     <DataGridTextColumn Header="CUSTOMER" Binding="{Binding CustomerName}" Width="1.45*" />
                                     <DataGridTextColumn Header="DATE" Binding="{Binding InvoiceDate}" Width="1*" />
                                     <DataGridTextColumn Header="AMOUNT" Binding="{Binding Amount, StringFormat={}{0:C0}}" Width="1*" />
-                                    <DataGridTextColumn Header="STATUS" Binding="{Binding Status}" Width="0.8*" />
+                                    <DataGridTemplateColumn Header="STATUS" Width="0.8*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#69F599"
+                                                        CornerRadius="6"
+                                                        Height="28"
+                                                        HorizontalAlignment="Left"
+                                                        Padding="10,0">
+                                                    <TextBlock VerticalAlignment="Center"
+                                                               Foreground="#14532D"
+                                                               Text="{Binding Status}" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="PAYMENT" Binding="{Binding PaymentType}" Width="0.7*" />
                                 </DataGrid.Columns>
                             </DataGrid>
