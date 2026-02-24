@@ -40,6 +40,8 @@ public sealed class AddInventoryItemInput
 
     public string ProductCode { get; set; } = string.Empty;
 
+    public string Hsn { get; set; } = string.Empty;
+
     public decimal PurchasePrice { get; set; }
 
     public decimal SalesPrice { get; set; }

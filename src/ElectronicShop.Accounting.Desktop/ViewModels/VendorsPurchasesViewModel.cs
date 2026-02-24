@@ -23,24 +23,25 @@ public sealed class VendorsPurchasesViewModel : ViewModelBase
     private string _vendorAccountNameInput = string.Empty;
     private string _vendorAccountNumberInput = string.Empty;
 
-    private string _purchaseVendorNameInput = "Harshit Pandey";
+    private string _purchaseVendorNameInput = string.Empty;
     private string _purchaseDateInput = DateTime.Now.ToString("MM/dd/yyyy");
-    private string _purchaseStatusInput = "Pending";
-    private string _purchaseProductInput = "9W Light Bulb";
-    private int _purchaseQuantityInput = 2;
-    private decimal _purchasePriceInput = 2000m;
+    private string _purchaseStatusInput = string.Empty;
+    private string _purchaseProductInput = string.Empty;
+    private int _purchaseQuantityInput;
+    private decimal _purchasePriceInput;
+    private string _purchasePaymentModeInput = string.Empty;
 
-    private string _returnVendorNameInput = "Industrial Solutions Ltd.";
-    private string _returnInvoiceInput = "INV-2023-0892";
+    private string _returnVendorNameInput = string.Empty;
+    private string _returnInvoiceInput = string.Empty;
     private string _returnDateInput = DateTime.Now.ToString("MM/dd/yyyy");
-    private int _returnQuantityInput = 2;
-    private decimal _returnUnitPriceInput = 450m;
+    private int _returnQuantityInput;
+    private decimal _returnUnitPriceInput;
 
-    private string _payBillVendorNameInput = "Harshit Pandey";
-    private string _payBillInvoiceInput = "PO-2025-000024";
+    private string _payBillVendorNameInput = string.Empty;
+    private string _payBillInvoiceInput = string.Empty;
     private string _payBillDateInput = DateTime.Now.ToString("MM/dd/yyyy");
-    private string _payBillModeInput = "Bank Transfer";
-    private decimal _payBillAmountInput = 1000m;
+    private string _payBillModeInput = string.Empty;
+    private decimal _payBillAmountInput;
 
     public VendorsPurchasesViewModel(AccountingRepository repository)
     {
@@ -294,6 +295,12 @@ public sealed class VendorsPurchasesViewModel : ViewModelBase
 
     public decimal PurchaseReturnTotal => ReturnQuantityInput * ReturnUnitPriceInput;
 
+    public string PurchasePaymentModeInput
+    {
+        get => _purchasePaymentModeInput;
+        set => SetProperty(ref _purchasePaymentModeInput, value);
+    }
+
     public RelayCommand SelectVendorsCommand { get; }
 
     public RelayCommand SelectPurchaseInvoiceCommand { get; }
@@ -349,16 +356,27 @@ public sealed class VendorsPurchasesViewModel : ViewModelBase
 
     private void SaveVendor()
     {
+        if (string.IsNullOrWhiteSpace(VendorNameInput) ||
+            string.IsNullOrWhiteSpace(VendorCompanyInput) ||
+            string.IsNullOrWhiteSpace(VendorEmailInput) ||
+            string.IsNullOrWhiteSpace(VendorPhoneInput) ||
+            string.IsNullOrWhiteSpace(VendorAddressInput) ||
+            string.IsNullOrWhiteSpace(VendorAccountNameInput) ||
+            string.IsNullOrWhiteSpace(VendorAccountNumberInput))
+        {
+            return;
+        }
+
         _repository.AddVendor(
             new AddVendorInput
             {
-                VendorName = string.IsNullOrWhiteSpace(VendorNameInput) ? "New Vendor" : VendorNameInput,
-                CompanyName = string.IsNullOrWhiteSpace(VendorCompanyInput) ? VendorNameInput : VendorCompanyInput,
-                EmailAddress = string.IsNullOrWhiteSpace(VendorEmailInput) ? "contact@vendor.com" : VendorEmailInput,
-                PhoneNumber = string.IsNullOrWhiteSpace(VendorPhoneInput) ? "000-000-0000" : VendorPhoneInput,
-                Address = string.IsNullOrWhiteSpace(VendorAddressInput) ? "Unknown address" : VendorAddressInput,
-                AccountName = string.IsNullOrWhiteSpace(VendorAccountNameInput) ? "Vendor Account" : VendorAccountNameInput,
-                AccountNumber = string.IsNullOrWhiteSpace(VendorAccountNumberInput) ? "0000 0000 0000" : VendorAccountNumberInput
+                VendorName = VendorNameInput,
+                CompanyName = VendorCompanyInput,
+                EmailAddress = VendorEmailInput,
+                PhoneNumber = VendorPhoneInput,
+                Address = VendorAddressInput,
+                AccountName = VendorAccountNameInput,
+                AccountNumber = VendorAccountNumberInput
             });
 
         IsAddVendorOpen = false;
@@ -374,50 +392,94 @@ public sealed class VendorsPurchasesViewModel : ViewModelBase
 
     private void SavePurchaseInvoice()
     {
+        if (string.IsNullOrWhiteSpace(PurchaseVendorNameInput) ||
+            string.IsNullOrWhiteSpace(PurchaseDateInput) ||
+            string.IsNullOrWhiteSpace(PurchaseStatusInput) ||
+            string.IsNullOrWhiteSpace(PurchaseProductInput) ||
+            PurchaseQuantityInput <= 0 ||
+            PurchasePriceInput <= 0 ||
+            string.IsNullOrWhiteSpace(PurchasePaymentModeInput))
+        {
+            return;
+        }
+
         _repository.AddPurchaseInvoice(
             new AddPurchaseInvoiceInput
             {
-                VendorName = string.IsNullOrWhiteSpace(PurchaseVendorNameInput) ? "Harshit Pandey" : PurchaseVendorNameInput,
-                PurchaseDate = string.IsNullOrWhiteSpace(PurchaseDateInput) ? DateTime.Now.ToString("MM/dd/yyyy") : PurchaseDateInput,
-                PurchaseStatus = string.IsNullOrWhiteSpace(PurchaseStatusInput) ? "Pending" : PurchaseStatusInput,
-                ProductName = string.IsNullOrWhiteSpace(PurchaseProductInput) ? "General Product" : PurchaseProductInput,
-                Quantity = PurchaseQuantityInput <= 0 ? 1 : PurchaseQuantityInput,
-                Price = PurchasePriceInput <= 0 ? 100m : PurchasePriceInput
+                VendorName = PurchaseVendorNameInput,
+                PurchaseDate = PurchaseDateInput,
+                PurchaseStatus = PurchaseStatusInput,
+                ProductName = PurchaseProductInput,
+                Quantity = PurchaseQuantityInput,
+                Price = PurchasePriceInput,
+                PaymentMode = PurchasePaymentModeInput
             });
 
         IsPurchaseInvoiceOpen = false;
+        PurchaseVendorNameInput = string.Empty;
+        PurchaseStatusInput = string.Empty;
+        PurchaseProductInput = string.Empty;
+        PurchaseQuantityInput = 0;
+        PurchasePriceInput = 0;
+        PurchasePaymentModeInput = string.Empty;
         LoadData();
     }
 
     private void SavePurchaseReturn()
     {
+        if (string.IsNullOrWhiteSpace(ReturnVendorNameInput) ||
+            string.IsNullOrWhiteSpace(ReturnInvoiceInput) ||
+            string.IsNullOrWhiteSpace(ReturnDateInput) ||
+            ReturnQuantityInput <= 0 ||
+            ReturnUnitPriceInput <= 0)
+        {
+            return;
+        }
+
         _repository.AddPurchaseReturn(
             new AddPurchaseReturnInput
             {
-                VendorName = string.IsNullOrWhiteSpace(ReturnVendorNameInput) ? "Industrial Solutions Ltd." : ReturnVendorNameInput,
-                InvoiceNumber = string.IsNullOrWhiteSpace(ReturnInvoiceInput) ? "INV-NEW" : ReturnInvoiceInput,
-                ReturnDate = string.IsNullOrWhiteSpace(ReturnDateInput) ? DateTime.Now.ToString("MM/dd/yyyy") : ReturnDateInput,
-                ReturnQuantity = ReturnQuantityInput <= 0 ? 1 : ReturnQuantityInput,
-                UnitPrice = ReturnUnitPriceInput <= 0 ? 100m : ReturnUnitPriceInput
+                VendorName = ReturnVendorNameInput,
+                InvoiceNumber = ReturnInvoiceInput,
+                ReturnDate = ReturnDateInput,
+                ReturnQuantity = ReturnQuantityInput,
+                UnitPrice = ReturnUnitPriceInput
             });
 
         IsPurchaseReturnOpen = false;
+        ReturnVendorNameInput = string.Empty;
+        ReturnInvoiceInput = string.Empty;
+        ReturnQuantityInput = 0;
+        ReturnUnitPriceInput = 0;
         LoadData();
     }
 
     private void SavePayBill()
     {
+        if (string.IsNullOrWhiteSpace(PayBillVendorNameInput) ||
+            string.IsNullOrWhiteSpace(PayBillInvoiceInput) ||
+            string.IsNullOrWhiteSpace(PayBillDateInput) ||
+            string.IsNullOrWhiteSpace(PayBillModeInput) ||
+            PayBillAmountInput <= 0)
+        {
+            return;
+        }
+
         _repository.AddVendorPayment(
             new AddVendorPaymentInput
             {
-                VendorName = string.IsNullOrWhiteSpace(PayBillVendorNameInput) ? "Harshit Pandey" : PayBillVendorNameInput,
-                InvoiceNumber = string.IsNullOrWhiteSpace(PayBillInvoiceInput) ? "PO-NEW" : PayBillInvoiceInput,
-                PaymentDate = string.IsNullOrWhiteSpace(PayBillDateInput) ? DateTime.Now.ToString("MM/dd/yyyy") : PayBillDateInput,
-                Amount = PayBillAmountInput <= 0 ? 100m : PayBillAmountInput,
-                PaymentMode = string.IsNullOrWhiteSpace(PayBillModeInput) ? "Bank Transfer" : PayBillModeInput
+                VendorName = PayBillVendorNameInput,
+                InvoiceNumber = PayBillInvoiceInput,
+                PaymentDate = PayBillDateInput,
+                Amount = PayBillAmountInput,
+                PaymentMode = PayBillModeInput
             });
 
         IsPayBillOpen = false;
+        PayBillVendorNameInput = string.Empty;
+        PayBillInvoiceInput = string.Empty;
+        PayBillModeInput = string.Empty;
+        PayBillAmountInput = 0;
         LoadData();
     }
 

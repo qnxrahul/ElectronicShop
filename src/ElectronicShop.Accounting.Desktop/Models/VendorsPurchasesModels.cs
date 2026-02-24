@@ -106,6 +106,8 @@ public sealed class AddPurchaseInvoiceInput
     public int Quantity { get; set; }
 
     public decimal Price { get; set; }
+
+    public string PaymentMode { get; set; } = string.Empty;
 }
 
 public sealed class AddPurchaseReturnInput

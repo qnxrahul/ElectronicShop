@@ -13,7 +13,11 @@ Accounting desktop implementation (WPF + MVVM + SQLite + Dapper) is now scaffold
 - `src/ElectronicShop.Accounting.Desktop/`
   - `Views/` (Dashboard, Billing & Invoice, Inventory & Services, Banking)
   - `ViewModels/` (MVVM bindings and screen state)
-  - `Data/` (SQLite schema + seed data + Dapper repository)
+  - `Data/`
+    - `Scripts/001_schema.sql` (database schema)
+    - `Scripts/002_seed.sql` (initial seed data)
+    - `AccountingRepository.cs` (Dapper data access)
+    - `DatabaseInitializer.cs` (script-driven DB initialization)
   - `Models/`, `Infrastructure/`, `Styles/`
 
 ## Screens implemented
@@ -30,6 +34,12 @@ Navigation modules implemented:
 8. Settings (Company Profile, Accounts Management, User Management, Backup & Security + add dialogs)
 
 All modules are data-backed through SQLite + Dapper seed/repository methods. Create flows from dialogs are wired to database insert/update operations.
+
+## Data seeding policy
+
+- No sample business values are hardcoded inside view-model save flows.
+- Initial data is seeded from SQL scripts under `Data/Scripts`.
+- You can adjust/replace seed content by editing `002_seed.sql` without code changes.
 
 ## Running locally (Windows)
 

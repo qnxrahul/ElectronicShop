@@ -11,12 +11,13 @@ public sealed class InventoryViewModel : ViewModelBase
     private string _searchText = string.Empty;
     private bool _isAddProductOpen;
     private string _newProductName = string.Empty;
-    private string _newCategory = "LED & Lighting";
+    private string _newCategory = string.Empty;
     private string _newProductCode = string.Empty;
+    private string _newHsn = string.Empty;
     private decimal _newPurchasePrice;
     private decimal _newSalesPrice;
     private int _newOpeningStock;
-    private int _newReorderLevel = 20;
+    private int _newReorderLevel;
 
     public InventoryViewModel(AccountingRepository repository)
     {
@@ -59,6 +60,12 @@ public sealed class InventoryViewModel : ViewModelBase
     {
         get => _newProductCode;
         set => SetProperty(ref _newProductCode, value);
+    }
+
+    public string NewHsn
+    {
+        get => _newHsn;
+        set => SetProperty(ref _newHsn, value);
     }
 
     public decimal NewPurchasePrice
@@ -108,25 +115,40 @@ public sealed class InventoryViewModel : ViewModelBase
 
     private void SaveProduct()
     {
+        if (string.IsNullOrWhiteSpace(NewProductName) ||
+            string.IsNullOrWhiteSpace(NewCategory) ||
+            string.IsNullOrWhiteSpace(NewProductCode) ||
+            string.IsNullOrWhiteSpace(NewHsn) ||
+            NewPurchasePrice <= 0 ||
+            NewSalesPrice <= 0 ||
+            NewOpeningStock < 0 ||
+            NewReorderLevel <= 0)
+        {
+            return;
+        }
+
         _repository.AddInventoryItem(
             new AddInventoryItemInput
             {
-                ProductName = string.IsNullOrWhiteSpace(NewProductName) ? "New Product" : NewProductName,
-                Category = string.IsNullOrWhiteSpace(NewCategory) ? "General" : NewCategory,
+                ProductName = NewProductName,
+                Category = NewCategory,
                 ProductCode = NewProductCode,
-                PurchasePrice = NewPurchasePrice <= 0 ? 100m : NewPurchasePrice,
-                SalesPrice = NewSalesPrice <= 0 ? 120m : NewSalesPrice,
-                OpeningStock = NewOpeningStock < 0 ? 0 : NewOpeningStock,
-                ReorderLevel = NewReorderLevel <= 0 ? 10 : NewReorderLevel
+                Hsn = NewHsn,
+                PurchasePrice = NewPurchasePrice,
+                SalesPrice = NewSalesPrice,
+                OpeningStock = NewOpeningStock,
+                ReorderLevel = NewReorderLevel
             });
 
         IsAddProductOpen = false;
         NewProductName = string.Empty;
+        NewCategory = string.Empty;
         NewProductCode = string.Empty;
+        NewHsn = string.Empty;
         NewPurchasePrice = 0m;
         NewSalesPrice = 0m;
         NewOpeningStock = 0;
-        NewReorderLevel = 20;
+        NewReorderLevel = 0;
         LoadData();
     }
 }

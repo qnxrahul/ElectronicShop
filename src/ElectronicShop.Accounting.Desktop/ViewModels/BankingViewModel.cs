@@ -9,9 +9,9 @@ public sealed class BankingViewModel : ViewModelBase
 {
     private readonly AccountingRepository _repository;
     private bool _isNewTransactionOpen;
-    private string _transactionType = "Received";
+    private string _transactionType = string.Empty;
     private string _transactionDate = DateTime.Now.ToString("MM/dd/yyyy");
-    private string _selectedAccount = "HDFC Bank - Current";
+    private string _selectedAccount = string.Empty;
     private decimal _transactionAmount;
     private string _transactionDescription = string.Empty;
 
@@ -87,14 +87,23 @@ public sealed class BankingViewModel : ViewModelBase
 
     private void SaveTransaction()
     {
+        if (string.IsNullOrWhiteSpace(TransactionType) ||
+            string.IsNullOrWhiteSpace(TransactionDate) ||
+            string.IsNullOrWhiteSpace(SelectedAccount) ||
+            TransactionAmount <= 0 ||
+            string.IsNullOrWhiteSpace(TransactionDescription))
+        {
+            return;
+        }
+
         _repository.AddBankTransaction(
             new AddBankTransactionInput
             {
-                TransactionType = string.IsNullOrWhiteSpace(TransactionType) ? "Received" : TransactionType,
-                TransactionDate = string.IsNullOrWhiteSpace(TransactionDate) ? DateTime.Now.ToString("MM/dd/yyyy") : TransactionDate,
-                AccountName = string.IsNullOrWhiteSpace(SelectedAccount) ? "Cash Account" : SelectedAccount,
-                Amount = TransactionAmount <= 0 ? 100m : TransactionAmount,
-                Description = string.IsNullOrWhiteSpace(TransactionDescription) ? "Manual transaction entry" : TransactionDescription
+                TransactionType = TransactionType,
+                TransactionDate = TransactionDate,
+                AccountName = SelectedAccount,
+                Amount = TransactionAmount,
+                Description = TransactionDescription
             });
 
         IsNewTransactionOpen = false;

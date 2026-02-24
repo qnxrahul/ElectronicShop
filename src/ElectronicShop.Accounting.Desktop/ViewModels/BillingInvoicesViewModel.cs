@@ -12,9 +12,9 @@ public sealed class BillingInvoicesViewModel : ViewModelBase
     private string _searchText = string.Empty;
     private bool _isCreateInvoiceDialogOpen;
     private bool _isInvoiceEditorOpen;
-    private string _invoiceCustomerName = "John Doe";
-    private string _invoicePhoneNumber = "+27 82 123 4567";
-    private string _invoicePaymentType = "Cash";
+    private string _invoiceCustomerName = string.Empty;
+    private string _invoicePhoneNumber = string.Empty;
+    private string _invoicePaymentType = string.Empty;
 
     public BillingInvoicesViewModel(AccountingRepository repository)
     {
@@ -30,11 +30,7 @@ public sealed class BillingInvoicesViewModel : ViewModelBase
         SaveInvoiceCommand = new RelayCommand(() => SaveInvoice("Completed"));
         SaveDraftCommand = new RelayCommand(() => SaveInvoice("Draft"));
 
-        EditorItems =
-        [
-            new InvoiceEditorLine { RowNumber = 1, Code = "202", ItemName = "Wireless Logitech Mouse M185", Quantity = 2, Rate = 250m, Amount = 500m },
-            new InvoiceEditorLine { RowNumber = 2, Code = "203", ItemName = "Wireless Logitech Mouse M185", Quantity = 2, Rate = 250m, Amount = 500m }
-        ];
+        EditorItems = [];
 
         LoadData();
     }
@@ -95,7 +91,7 @@ public sealed class BillingInvoicesViewModel : ViewModelBase
 
     public decimal InvoiceSubtotal => EditorItems.Sum(item => item.Amount);
 
-    public decimal InvoiceGrandTotal => InvoiceSubtotal + 132m;
+    public decimal InvoiceGrandTotal => InvoiceSubtotal;
 
     public RelayCommand SelectInvoicesCommand { get; }
 
@@ -136,17 +132,26 @@ public sealed class BillingInvoicesViewModel : ViewModelBase
     private void OpenInvoiceEditor()
     {
         IsCreateInvoiceDialogOpen = false;
+        LoadEditorTemplate();
         IsInvoiceEditorOpen = true;
     }
 
     private void SaveInvoice(string status)
     {
+        if (string.IsNullOrWhiteSpace(InvoiceCustomerName) ||
+            string.IsNullOrWhiteSpace(InvoicePhoneNumber) ||
+            string.IsNullOrWhiteSpace(InvoicePaymentType) ||
+            EditorItems.Count == 0)
+        {
+            return;
+        }
+
         _repository.AddBillingInvoice(
             new AddBillingInvoiceInput
             {
-                CustomerName = string.IsNullOrWhiteSpace(InvoiceCustomerName) ? "Walk-in Customer" : InvoiceCustomerName,
-                PhoneNumber = string.IsNullOrWhiteSpace(InvoicePhoneNumber) ? "NA" : InvoicePhoneNumber,
-                PaymentType = string.IsNullOrWhiteSpace(InvoicePaymentType) ? "Cash" : InvoicePaymentType,
+                CustomerName = InvoiceCustomerName,
+                PhoneNumber = InvoicePhoneNumber,
+                PaymentType = InvoicePaymentType,
                 Status = status,
                 InvoiceFlowType = SelectedTab == "Return & Exchange" ? "Return & Exchange" : SelectedTab == "Completed" ? "Completed" : "Invoice",
                 TotalAmount = InvoiceGrandTotal,
@@ -155,5 +160,17 @@ public sealed class BillingInvoicesViewModel : ViewModelBase
 
         IsInvoiceEditorOpen = false;
         LoadData();
+    }
+
+    private void LoadEditorTemplate()
+    {
+        EditorItems.Clear();
+        foreach (var line in _repository.GetInvoiceEditorTemplateLines())
+        {
+            EditorItems.Add(line);
+        }
+
+        OnPropertyChanged(nameof(InvoiceSubtotal));
+        OnPropertyChanged(nameof(InvoiceGrandTotal));
     }
 }

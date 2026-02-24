@@ -9,7 +9,7 @@
                        Text="Dashboard" />
             <TextBlock Margin="0,4,0,16"
                        Style="{StaticResource PageSubtitleStyle}"
-                       Text="Welcome back, Harshit" />
+                       Text="Welcome back" />
 
             <Grid>
                 <Grid.ColumnDefinitions>

@@ -6,10 +6,12 @@ namespace ElectronicShop.Accounting.Desktop.Data;
 
 public sealed class AccountingRepository
 {
+    private readonly string _databasePath;
     private readonly string _connectionString;
 
     public AccountingRepository(string databasePath)
     {
+        _databasePath = databasePath;
         _connectionString = $"Data Source={databasePath}";
     }
 
@@ -23,7 +25,13 @@ public sealed class AccountingRepository
             """;
 
         using var connection = CreateConnection();
-        return connection.Query<DashboardSummaryCard>(sql).ToList();
+        var cards = connection.Query<DashboardSummaryCard>(sql).ToList();
+        foreach (var card in cards)
+        {
+            card.IconGlyph = DecodeGlyph(card.IconGlyph);
+        }
+
+        return cards;
     }
 
     public IReadOnlyList<MonthlySalesPoint> GetMonthlySalesTrend()
@@ -124,12 +132,32 @@ public sealed class AccountingRepository
                 input.PhoneNumber,
                 ItemCount = input.ItemCount,
                 TotalAmount = input.TotalAmount,
-                CreatedBy = "System",
+                CreatedBy = Environment.UserName,
                 CreatedDate = DateTime.Now.ToString("M/d/yyyy"),
                 input.PaymentType,
                 input.Status,
                 input.InvoiceFlowType
             });
+    }
+
+    public IReadOnlyList<InvoiceEditorLine> GetInvoiceEditorTemplateLines(int maxRows = 3)
+    {
+        const string sql =
+            """
+            SELECT
+                Id AS RowNumber,
+                Sku AS Code,
+                ProductName AS ItemName,
+                1 AS Quantity,
+                SellingPrice AS Rate,
+                SellingPrice AS Amount
+            FROM InventoryItems
+            ORDER BY Id
+            LIMIT @Limit;
+            """;
+
+        using var connection = CreateConnection();
+        return connection.Query<InvoiceEditorLine>(sql, new { Limit = maxRows }).ToList();
     }
 
     public IReadOnlyList<InventoryOverviewCard> GetInventoryOverviewCards()
@@ -142,7 +170,13 @@ public sealed class AccountingRepository
             """;
 
         using var connection = CreateConnection();
-        return connection.Query<InventoryOverviewCard>(sql).ToList();
+        var cards = connection.Query<InventoryOverviewCard>(sql).ToList();
+        foreach (var card in cards)
+        {
+            card.IconGlyph = DecodeGlyph(card.IconGlyph);
+        }
+
+        return cards;
     }
 
     public IReadOnlyList<InventoryItemRow> GetInventoryItems()
@@ -162,7 +196,7 @@ public sealed class AccountingRepository
     {
         using var connection = CreateConnection();
         var sNo = connection.ExecuteScalar<int>("SELECT COALESCE(MAX(SNo), 0) + 1 FROM InventoryItems;");
-        var sku = string.IsNullOrWhiteSpace(input.ProductCode) ? $"ITM-{sNo:000}" : input.ProductCode.ToUpperInvariant();
+        var sku = input.ProductCode.ToUpperInvariant();
         var status = input.OpeningStock <= 5 ? "Critical" : input.OpeningStock <= input.ReorderLevel ? "Low" : "Good";
 
         connection.Execute(
@@ -178,7 +212,7 @@ public sealed class AccountingRepository
                 Sku = sku,
                 input.ProductName,
                 input.Category,
-                Hsn = "85395000",
+                input.Hsn,
                 input.PurchasePrice,
                 SellingPrice = input.SalesPrice,
                 Stock = input.OpeningStock,
@@ -199,7 +233,13 @@ public sealed class AccountingRepository
             """;
 
         using var connection = CreateConnection();
-        return connection.Query<BankAccountCard>(sql).ToList();
+        var accounts = connection.Query<BankAccountCard>(sql).ToList();
+        foreach (var account in accounts)
+        {
+            account.IconGlyph = DecodeGlyph(account.IconGlyph);
+        }
+
+        return accounts;
     }
 
     public IReadOnlyList<BankTransactionRow> GetBankTransactions()
@@ -387,7 +427,7 @@ public sealed class AccountingRepository
                 TotalAmount = totalAmount,
                 DueDate = input.PurchaseDate,
                 LastPaymentDate = input.PurchaseDate,
-                PaymentMode = "Bank Transfer"
+                PaymentMode = input.PaymentMode
             });
     }
 
@@ -407,7 +447,7 @@ public sealed class AccountingRepository
             new
             {
                 SNo = sNo,
-                PONumber = string.IsNullOrWhiteSpace(input.InvoiceNumber) ? $"PO-2025-{sNo:000000}" : input.InvoiceNumber,
+                PONumber = input.InvoiceNumber,
                 input.VendorName,
                 PurchasedQuantity = input.ReturnQuantity,
                 ReturnQuantity = input.ReturnQuantity,
@@ -492,7 +532,13 @@ public sealed class AccountingRepository
             """;
 
         using var connection = CreateConnection();
-        return connection.Query<ExpenseSummaryCard>(sql).ToList();
+        var cards = connection.Query<ExpenseSummaryCard>(sql).ToList();
+        foreach (var card in cards)
+        {
+            card.IconGlyph = DecodeGlyph(card.IconGlyph);
+        }
+
+        return cards;
     }
 
     public IReadOnlyList<ExpenseRow> GetExpenses()
@@ -741,9 +787,6 @@ public sealed class AccountingRepository
     public void AddAppUser(AddUserInput input)
     {
         using var connection = CreateConnection();
-        var emailPrefix = input.UserName.Replace(" ", ".", StringComparison.Ordinal).ToLowerInvariant();
-        var email = $"{emailPrefix}@enterprise.com";
-
         connection.Execute(
             """
             INSERT INTO AppUsers (UserName, EmailAddress, MobileNumber, Role, IsActive, PasswordHash)
@@ -752,7 +795,7 @@ public sealed class AccountingRepository
             new
             {
                 input.UserName,
-                EmailAddress = email,
+                input.EmailAddress,
                 input.MobileNumber,
                 input.Role,
                 IsActive = 1,
@@ -800,6 +843,7 @@ public sealed class AccountingRepository
     public void AddBackupLog(string activity, string status)
     {
         using var connection = CreateConnection();
+        var size = GetDatabaseSizeDisplay();
         connection.Execute(
             """
             INSERT INTO BackupLogs (Activity, DateAndTime, Size, Status)
@@ -809,7 +853,7 @@ public sealed class AccountingRepository
             {
                 Activity = activity,
                 DateAndTime = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt"),
-                Size = "41.0 MB",
+                Size = size,
                 Status = status
             });
     }
@@ -823,6 +867,17 @@ public sealed class AccountingRepository
         }
 
         return "Debit";
+    }
+
+    private static string DecodeGlyph(string glyph)
+    {
+        if (glyph.Length == 4 &&
+            int.TryParse(glyph, System.Globalization.NumberStyles.HexNumber, null, out var codePoint))
+        {
+            return char.ConvertFromUtf32(codePoint);
+        }
+
+        return glyph;
     }
 
     private static void RefreshInventorySummary(IDbConnection connection)
@@ -874,6 +929,18 @@ public sealed class AccountingRepository
         var connection = new SqliteConnection(_connectionString);
         connection.Open();
         return connection;
+    }
+
+    private string GetDatabaseSizeDisplay()
+    {
+        if (!File.Exists(_databasePath))
+        {
+            return "0.0 MB";
+        }
+
+        var bytes = new FileInfo(_databasePath).Length;
+        var mb = bytes / (1024d * 1024d);
+        return $"{mb:F1} MB";
     }
 
     private sealed class VendorPaymentState

@@ -482,6 +482,9 @@
                     <TextBlock Margin="0,14,0,4" Text="User Name" />
                     <TextBox Text="{Binding NewUserName, UpdateSourceTrigger=PropertyChanged}" />
 
+                    <TextBlock Margin="0,12,0,4" Text="Email Address" />
+                    <TextBox Text="{Binding NewUserEmail, UpdateSourceTrigger=PropertyChanged}" />
+
                     <TextBlock Margin="0,12,0,4" Text="Mobile Number" />
                     <TextBox Text="{Binding NewUserMobileNumber, UpdateSourceTrigger=PropertyChanged}" />
 

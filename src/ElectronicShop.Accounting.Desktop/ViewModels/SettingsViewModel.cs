@@ -19,14 +19,15 @@ public sealed class SettingsViewModel : ViewModelBase
     private bool _autoBackupEnabled;
 
     private string _newAccountName = string.Empty;
-    private string _newAccountType = "Bank";
+    private string _newAccountType = string.Empty;
     private decimal _newAccountOpeningBalance;
     private string _newAccountAsOfDate = DateTime.Now.ToString("MM/dd/yyyy");
 
     private string _newUserName = string.Empty;
+    private string _newUserEmail = string.Empty;
     private string _newUserMobileNumber = string.Empty;
     private string _newUserPassword = string.Empty;
-    private string _newUserRole = "Accountant";
+    private string _newUserRole = string.Empty;
 
     public SettingsViewModel(AccountingRepository repository)
     {
@@ -173,6 +174,12 @@ public sealed class SettingsViewModel : ViewModelBase
         set => SetProperty(ref _newUserMobileNumber, value);
     }
 
+    public string NewUserEmail
+    {
+        get => _newUserEmail;
+        set => SetProperty(ref _newUserEmail, value);
+    }
+
     public string NewUserPassword
     {
         get => _newUserPassword;
@@ -262,31 +269,47 @@ public sealed class SettingsViewModel : ViewModelBase
 
     private void SaveCompanyProfile()
     {
+        if (string.IsNullOrWhiteSpace(CompanyName) ||
+            string.IsNullOrWhiteSpace(MobileNumber) ||
+            string.IsNullOrWhiteSpace(EmailAddress) ||
+            string.IsNullOrWhiteSpace(Address))
+        {
+            return;
+        }
+
         _repository.SaveCompanyProfile(
             new CompanyProfileSettings
             {
-                CompanyName = string.IsNullOrWhiteSpace(CompanyName) ? "Company Name" : CompanyName,
-                MobileNumber = string.IsNullOrWhiteSpace(MobileNumber) ? "NA" : MobileNumber,
-                EmailAddress = string.IsNullOrWhiteSpace(EmailAddress) ? "info@company.com" : EmailAddress,
-                Address = string.IsNullOrWhiteSpace(Address) ? "Address not provided" : Address,
+                CompanyName = CompanyName,
+                MobileNumber = MobileNumber,
+                EmailAddress = EmailAddress,
+                Address = Address,
                 LogoPath = string.Empty
             });
     }
 
     private void SaveAddAccount()
     {
+        if (string.IsNullOrWhiteSpace(NewAccountName) ||
+            string.IsNullOrWhiteSpace(NewAccountType) ||
+            string.IsNullOrWhiteSpace(NewAccountAsOfDate) ||
+            NewAccountOpeningBalance < 0)
+        {
+            return;
+        }
+
         _repository.AddLedgerAccount(
             new AddAccountInput
             {
-                AccountName = string.IsNullOrWhiteSpace(NewAccountName) ? "New Account" : NewAccountName,
-                AccountType = string.IsNullOrWhiteSpace(NewAccountType) ? "Bank" : NewAccountType,
+                AccountName = NewAccountName,
+                AccountType = NewAccountType,
                 OpeningBalance = NewAccountOpeningBalance,
-                AsOfDate = string.IsNullOrWhiteSpace(NewAccountAsOfDate) ? DateTime.Now.ToString("MM/dd/yyyy") : NewAccountAsOfDate
+                AsOfDate = NewAccountAsOfDate
             });
 
         IsAddAccountOpen = false;
         NewAccountName = string.Empty;
-        NewAccountType = "Bank";
+        NewAccountType = string.Empty;
         NewAccountOpeningBalance = 0m;
         NewAccountAsOfDate = DateTime.Now.ToString("MM/dd/yyyy");
         ReplaceCollection(AccountSummaryCards, _repository.GetAccountSummaryCards());
@@ -295,20 +318,31 @@ public sealed class SettingsViewModel : ViewModelBase
 
     private void SaveAddUser()
     {
+        if (string.IsNullOrWhiteSpace(NewUserName) ||
+            string.IsNullOrWhiteSpace(NewUserEmail) ||
+            string.IsNullOrWhiteSpace(NewUserMobileNumber) ||
+            string.IsNullOrWhiteSpace(NewUserPassword) ||
+            string.IsNullOrWhiteSpace(NewUserRole))
+        {
+            return;
+        }
+
         _repository.AddAppUser(
             new AddUserInput
             {
-                UserName = string.IsNullOrWhiteSpace(NewUserName) ? "New User" : NewUserName,
-                MobileNumber = string.IsNullOrWhiteSpace(NewUserMobileNumber) ? "+1 (000) 000-0000" : NewUserMobileNumber,
-                Password = string.IsNullOrWhiteSpace(NewUserPassword) ? "password123" : NewUserPassword,
-                Role = string.IsNullOrWhiteSpace(NewUserRole) ? "Accountant" : NewUserRole
+                UserName = NewUserName,
+                EmailAddress = NewUserEmail,
+                MobileNumber = NewUserMobileNumber,
+                Password = NewUserPassword,
+                Role = NewUserRole
             });
 
         IsAddUserOpen = false;
         NewUserName = string.Empty;
+        NewUserEmail = string.Empty;
         NewUserMobileNumber = string.Empty;
         NewUserPassword = string.Empty;
-        NewUserRole = "Accountant";
+        NewUserRole = string.Empty;
         ReplaceCollection(AppUsers, _repository.GetAppUsers());
     }
 

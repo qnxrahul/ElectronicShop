@@ -12,8 +12,8 @@ public sealed class ExpensesViewModel : ViewModelBase
     private string _expenseTitleInput = string.Empty;
     private decimal _expenseAmountInput;
     private string _expenseDateInput = DateTime.Now.ToString("MM/dd/yyyy");
-    private string _expenseCategoryInput = "Utilities";
-    private string _expensePaidFromInput = "Cash Account";
+    private string _expenseCategoryInput = string.Empty;
+    private string _expensePaidFromInput = string.Empty;
 
     public ExpensesViewModel(AccountingRepository repository)
     {
@@ -88,19 +88,30 @@ public sealed class ExpensesViewModel : ViewModelBase
 
     private void SaveExpense()
     {
+        if (string.IsNullOrWhiteSpace(ExpenseTitleInput) ||
+            ExpenseAmountInput <= 0 ||
+            string.IsNullOrWhiteSpace(ExpenseDateInput) ||
+            string.IsNullOrWhiteSpace(ExpenseCategoryInput) ||
+            string.IsNullOrWhiteSpace(ExpensePaidFromInput))
+        {
+            return;
+        }
+
         _repository.AddExpense(
             new AddExpenseInput
             {
-                Title = string.IsNullOrWhiteSpace(ExpenseTitleInput) ? "General expense" : ExpenseTitleInput,
-                Amount = ExpenseAmountInput <= 0 ? 100m : ExpenseAmountInput,
-                ExpenseDate = string.IsNullOrWhiteSpace(ExpenseDateInput) ? DateTime.Now.ToString("MM/dd/yyyy") : ExpenseDateInput,
-                Category = string.IsNullOrWhiteSpace(ExpenseCategoryInput) ? "Other" : ExpenseCategoryInput,
-                PaidFrom = string.IsNullOrWhiteSpace(ExpensePaidFromInput) ? "Cash Account" : ExpensePaidFromInput
+                Title = ExpenseTitleInput,
+                Amount = ExpenseAmountInput,
+                ExpenseDate = ExpenseDateInput,
+                Category = ExpenseCategoryInput,
+                PaidFrom = ExpensePaidFromInput
             });
 
         IsAddExpenseOpen = false;
         ExpenseTitleInput = string.Empty;
         ExpenseAmountInput = 0m;
+        ExpenseCategoryInput = string.Empty;
+        ExpensePaidFromInput = string.Empty;
         LoadData();
     }
 
