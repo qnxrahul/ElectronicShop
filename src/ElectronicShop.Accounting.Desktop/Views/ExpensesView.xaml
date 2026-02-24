@@ -1,0 +1,233 @@
+<UserControl x:Class="ElectronicShop.Accounting.Desktop.Views.ExpensesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="6">
+            <StackPanel>
+                <TextBlock Style="{StaticResource PageTitleStyle}"
+                           Text="Expenses" />
+                <TextBlock Margin="0,4,0,16"
+                           Style="{StaticResource PageSubtitleStyle}"
+                           Text="Track and manage business expenses" />
+
+                <ItemsControl ItemsSource="{Binding SummaryCards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,10,12"
+                                    Style="{StaticResource SurfaceCardStyle}"
+                                    Background="{Binding AccentColor}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock FontSize="12"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#56606F"
+                                                   Text="{Binding Title}" />
+                                        <TextBlock Margin="0,10,0,0"
+                                                   FontWeight="Bold"
+                                                   FontSize="34"
+                                                   Text="{Binding Amount, StringFormat={}{0:C0}}" />
+                                    </StackPanel>
+                                    <Border Grid.Column="1"
+                                            Width="34"
+                                            Height="34"
+                                            Background="#F8F9FB"
+                                            CornerRadius="8">
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="16"
+                                                   Text="{Binding IconGlyph}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                            Style="{StaticResource SurfaceCardStyle}"
+                            Margin="0,0,10,0">
+                        <StackPanel>
+                            <DockPanel Margin="0,0,0,10">
+                                <StackPanel DockPanel.Dock="Left">
+                                    <TextBlock FontSize="26"
+                                               FontWeight="Bold"
+                                               Text="Recent Expenses" />
+                                    <TextBlock Foreground="#6C737E"
+                                               Text="Latest expense entries" />
+                                </StackPanel>
+                                <Button DockPanel.Dock="Right"
+                                        Style="{StaticResource PrimaryButtonStyle}"
+                                        Padding="16,10"
+                                        Command="{Binding OpenAddExpenseCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" />
+                                        <TextBlock Margin="8,0,0,0" Text="Add Expense" />
+                                    </StackPanel>
+                                </Button>
+                            </DockPanel>
+
+                            <DataGrid Style="{StaticResource DataGridStyle}"
+                                      IsReadOnly="True"
+                                      ItemsSource="{Binding Expenses}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Expense ID" Binding="{Binding ExpenseId}" Width="1*" />
+                                    <DataGridTextColumn Header="Date" Binding="{Binding ExpenseDate}" Width="0.9*" />
+                                    <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="1*" />
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="1.4*" />
+                                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:C0}}" Width="1*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            Style="{StaticResource SurfaceCardStyle}"
+                            Margin="10,0,0,0">
+                        <StackPanel>
+                            <TextBlock FontSize="26"
+                                       FontWeight="Bold"
+                                       Text="Expense By Category" />
+                            <TextBlock Foreground="#6C737E"
+                                       Text="Latest expense entries" />
+
+                            <ItemsControl Margin="0,10,0,0"
+                                          ItemsSource="{Binding CategoryBreakdown}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,0,0,10">
+                                            <DockPanel>
+                                                <TextBlock DockPanel.Dock="Left"
+                                                           FontWeight="SemiBold"
+                                                           Text="{Binding Category}" />
+                                                <TextBlock DockPanel.Dock="Right"
+                                                           FontWeight="SemiBold"
+                                                           Text="{Binding Percentage, StringFormat={}{0}%}" />
+                                            </DockPanel>
+                                            <Border Margin="0,4,0,0"
+                                                    Height="8"
+                                                    Background="#ECEFF3"
+                                                    CornerRadius="4">
+                                                <Border HorizontalAlignment="Left"
+                                                        Width="{Binding BarWidth}"
+                                                        Height="8"
+                                                        Background="#1A1D22"
+                                                        CornerRadius="4" />
+                                            </Border>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Border Margin="0,14,0,0"
+                                    Background="#F4F6F8"
+                                    CornerRadius="10"
+                                    Padding="12">
+                                <DockPanel>
+                                    <TextBlock FontFamily="Segoe MDL2 Assets"
+                                               Foreground="#6B7280"
+                                               Text="&#xE946;" />
+                                    <TextBlock Margin="10,0,0,0"
+                                               Foreground="#6B7280"
+                                               Text="Payroll is down by 2.1% compared to Q3 projection." />
+                                </DockPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Background="#77000000"
+                Visibility="{Binding IsAddExpenseOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Width="640"
+                    Padding="22"
+                    CornerRadius="12"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="#FFFFFF">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock FontSize="30"
+                                   FontWeight="Bold"
+                                   Text="Add New Expense" />
+                        <Button DockPanel.Dock="Right"
+                                Width="32"
+                                Height="32"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding CloseAddExpenseCommand}"
+                                Content="✕" />
+                    </DockPanel>
+
+                    <TextBlock Margin="0,14,0,4" Text="Expense Title / Description" />
+                    <TextBox Text="{Binding ExpenseTitleInput, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Amount" />
+                            <TextBox Margin="0,4,0,0" Text="{Binding ExpenseAmountInput, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="Expense Date" />
+                            <TextBox Margin="0,4,0,0" Text="{Binding ExpenseDateInput, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Category" />
+                            <TextBox Margin="0,4,0,0" Text="{Binding ExpenseCategoryInput, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="Paid From" />
+                            <TextBox Margin="0,4,0,0" Text="{Binding ExpensePaidFromInput, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <DockPanel Margin="0,16,0,0">
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Padding="16,10"
+                                Content="Save Expense"
+                                Command="{Binding SaveExpenseCommand}" />
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Padding="16,10"
+                                Margin="0,0,8,0"
+                                Content="Cancel"
+                                Command="{Binding CloseAddExpenseCommand}" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

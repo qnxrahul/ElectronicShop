@@ -10,8 +10,11 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly DashboardViewModel _dashboardViewModel;
     private readonly BillingInvoicesViewModel _billingViewModel;
     private readonly InventoryViewModel _inventoryViewModel;
+    private readonly VendorsPurchasesViewModel _vendorsPurchasesViewModel;
     private readonly BankingViewModel _bankingViewModel;
-    private readonly PlaceholderViewModel _placeholderViewModel;
+    private readonly ExpensesViewModel _expensesViewModel;
+    private readonly ReportsViewModel _reportsViewModel;
+    private readonly SettingsViewModel _settingsViewModel;
     private ViewModelBase _currentPage;
     private NavigationItem? _selectedNavigationItem;
     private string _globalSearchText = string.Empty;
@@ -21,8 +24,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         _dashboardViewModel = new DashboardViewModel(repository);
         _billingViewModel = new BillingInvoicesViewModel(repository);
         _inventoryViewModel = new InventoryViewModel(repository);
+        _vendorsPurchasesViewModel = new VendorsPurchasesViewModel(repository);
         _bankingViewModel = new BankingViewModel(repository);
-        _placeholderViewModel = new PlaceholderViewModel();
+        _expensesViewModel = new ExpensesViewModel(repository);
+        _reportsViewModel = new ReportsViewModel(repository);
+        _settingsViewModel = new SettingsViewModel(repository);
 
         NavigationItems =
         [
@@ -81,31 +87,24 @@ public sealed class MainWindowViewModel : ViewModelBase
             case NavigationTarget.Inventory:
                 CurrentPage = _inventoryViewModel;
                 break;
+            case NavigationTarget.Vendors:
+                CurrentPage = _vendorsPurchasesViewModel;
+                break;
             case NavigationTarget.Banking:
                 CurrentPage = _bankingViewModel;
                 break;
-            case NavigationTarget.Vendors:
-                ShowPlaceholder("Vendors & Purchases", "Vendor management and purchase flows will be added next.");
-                break;
             case NavigationTarget.Expenses:
-                ShowPlaceholder("Expenses", "Expense categories and journal workflows are planned for the next pass.");
+                CurrentPage = _expensesViewModel;
                 break;
             case NavigationTarget.Reports:
-                ShowPlaceholder("Reports", "Advanced reporting and export features are planned for the next pass.");
+                CurrentPage = _reportsViewModel;
                 break;
             case NavigationTarget.Settings:
-                ShowPlaceholder("Settings", "Company profile and app settings are planned for the next pass.");
+                CurrentPage = _settingsViewModel;
                 break;
             default:
-                ShowPlaceholder("Coming Soon", "This module is not implemented yet.");
+                CurrentPage = _dashboardViewModel;
                 break;
         }
-    }
-
-    private void ShowPlaceholder(string title, string description)
-    {
-        _placeholderViewModel.Title = title;
-        _placeholderViewModel.Description = description;
-        CurrentPage = _placeholderViewModel;
     }
 }

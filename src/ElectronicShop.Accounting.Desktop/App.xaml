@@ -26,6 +26,22 @@
                 <views:BankingView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModels:VendorsPurchasesViewModel}">
+                <views:VendorsPurchasesView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:ExpensesViewModel}">
+                <views:ExpensesView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:ReportsViewModel}">
+                <views:ReportsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+                <views:SettingsView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewModels:PlaceholderViewModel}">
                 <views:PlaceholderView />
             </DataTemplate>

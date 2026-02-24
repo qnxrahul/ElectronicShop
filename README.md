@@ -1,6 +1,6 @@
 # ElectronicShop
 
-Initial implementation for the accounting desktop application is now scaffolded with:
+Accounting desktop implementation (WPF + MVVM + SQLite + Dapper) is now scaffolded and expanded with full module coverage.
 
 - WPF + MVVM architecture
 - SQLite local database
@@ -16,14 +16,20 @@ Initial implementation for the accounting desktop application is now scaffolded 
   - `Data/` (SQLite schema + seed data + Dapper repository)
   - `Models/`, `Infrastructure/`, `Styles/`
 
-## Screens implemented in this iteration
+## Screens implemented
+
+Navigation modules implemented:
 
 1. Dashboard
-2. Billing & Invoice
-3. Inventory & Services
-4. Banking
+2. Billing & Invoice (including create invoice dialogs)
+3. Inventory & Services (including add product dialog)
+4. Vendors & Purchases (Vendors, Purchase Invoice, Purchase Return, Pay Bills + dialogs)
+5. Banking (including new transaction dialog)
+6. Expenses (including add expense dialog)
+7. Reports (Sales, Purchase, Stock, Customer Outstanding, Vendor Outstanding, Profit & Loss, Balance Sheet)
+8. Settings (Company Profile, Accounts Management, User Management, Backup & Security + add dialogs)
 
-Sidebar entries for Vendors, Expenses, Reports, and Settings are wired and currently show a placeholder screen for the next iteration.
+All modules are data-backed through SQLite + Dapper seed/repository methods. Create flows from dialogs are wired to database insert/update operations.
 
 ## Running locally (Windows)
 
