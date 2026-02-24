@@ -183,10 +183,10 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="#202329" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="TextElement.FontFamily" Value="{StaticResource TableFontFamily}" />
-        <Setter Property="TextElement.FontSize" Value="13" />
-        <Setter Property="TextElement.FontWeight" Value="Normal" />
-        <Setter Property="TextElement.LineHeight" Value="13" />
-        <Setter Property="TextElement.LineStackingStrategy" Value="BlockLineHeight" />
+        <Setter Property="FontFamily" Value="{StaticResource TableFontFamily}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="TextBlock.LineHeight" Value="13" />
+        <Setter Property="TextBlock.LineStackingStrategy" Value="BlockLineHeight" />
     </Style>
 </ResourceDictionary>
