@@ -153,6 +153,9 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
     </Style>
 
+    <Style TargetType="DataGrid"
+           BasedOn="{StaticResource DataGridStyle}" />
+
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="#181A1F" />
         <Setter Property="Foreground" Value="#FFFFFF" />
