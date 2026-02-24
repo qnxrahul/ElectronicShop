@@ -1,0 +1,186 @@
+<UserControl x:Class="ElectronicShop.Accounting.Desktop.Views.BankingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="6">
+            <StackPanel>
+                <TextBlock Style="{StaticResource PageTitleStyle}"
+                           Text="Banking" />
+                <TextBlock Margin="0,4,0,16"
+                           Style="{StaticResource PageSubtitleStyle}"
+                           Text="Manage cash and bank transactions" />
+
+                <ItemsControl ItemsSource="{Binding Accounts}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="3" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,10,12"
+                                    Style="{StaticResource SurfaceCardStyle}">
+                                <StackPanel>
+                                    <DockPanel LastChildFill="False">
+                                        <TextBlock DockPanel.Dock="Left"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding AccountName}" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="18"
+                                                   Foreground="#545A64"
+                                                   Text="{Binding IconGlyph}" />
+                                    </DockPanel>
+                                    <TextBlock Margin="0,14,0,14"
+                                               FontSize="42"
+                                               FontWeight="Bold"
+                                               Text="{Binding Balance, StringFormat={}{0:C0}}" />
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0"
+                                                Margin="0,0,5,0"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Content="Received"
+                                                Command="{Binding DataContext.OpenNewTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <Button Grid.Column="1"
+                                                Margin="5,0,0,0"
+                                                Style="{StaticResource PrimaryButtonStyle}"
+                                                Content="Pay"
+                                                Command="{Binding DataContext.OpenNewTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border Style="{StaticResource SurfaceCardStyle}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False"
+                                   Margin="0,0,0,12">
+                            <StackPanel DockPanel.Dock="Left">
+                                <TextBlock FontSize="26"
+                                           FontWeight="Bold"
+                                           Text="Recent Expenses" />
+                                <TextBlock Foreground="#6C737E"
+                                           Text="Latest expense entries" />
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Right"
+                                        Orientation="Horizontal">
+                                <Button Width="40"
+                                        Height="40"
+                                        Margin="0,0,8,0"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Content="&#xE787;"
+                                        FontFamily="Segoe MDL2 Assets" />
+                                <Button Style="{StaticResource PrimaryButtonStyle}"
+                                        Padding="16,10"
+                                        Command="{Binding OpenNewTransactionCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" />
+                                        <TextBlock Margin="8,0,0,0" Text="New Transaction" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <DataGrid Style="{StaticResource DataGridStyle}"
+                                  IsReadOnly="True"
+                                  ItemsSource="{Binding Transactions}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Transaction ID" Binding="{Binding TransactionCode}" Width="1.2*" />
+                                <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate}" Width="0.9*" />
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="1.6*" />
+                                <DataGridTextColumn Header="Account" Binding="{Binding AccountName}" Width="1*" />
+                                <DataGridTextColumn Header="Type" Binding="{Binding TransactionType}" Width="0.8*" />
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:C0}}" Width="1*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Background="#77000000"
+                Visibility="{Binding IsNewTransactionOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Width="540"
+                    Padding="20"
+                    CornerRadius="12"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="#FFFFFF">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock FontSize="30"
+                                   FontWeight="Bold"
+                                   Text="New Transaction" />
+                        <Button DockPanel.Dock="Right"
+                                Width="32"
+                                Height="32"
+                                FontSize="14"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding CloseNewTransactionCommand}"
+                                Content="✕" />
+                    </DockPanel>
+
+                    <TextBlock Margin="0,12,0,4" Text="Transaction Type" />
+                    <ComboBox IsEditable="True"
+                              Text="{Binding TransactionType, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBoxItem Content="Received" />
+                        <ComboBoxItem Content="Paid" />
+                    </ComboBox>
+
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Date" />
+                            <TextBox Margin="0,4,0,0"
+                                     Text="{Binding TransactionDate, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="Select Account" />
+                            <TextBox Margin="0,4,0,0"
+                                     Text="{Binding SelectedAccount, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Margin="0,12,0,4" Text="Amount" />
+                    <TextBox Text="{Binding TransactionAmount, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Margin="0,12,0,4" Text="Description" />
+                    <TextBox Height="76"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             Text="{Binding TransactionDescription, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <DockPanel Margin="0,16,0,0">
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Padding="16,10"
+                                Command="{Binding SaveTransactionCommand}"
+                                Content="Add Transaction" />
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Padding="16,10"
+                                Margin="0,0,8,0"
+                                Command="{Binding CloseNewTransactionCommand}"
+                                Content="Cancel" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

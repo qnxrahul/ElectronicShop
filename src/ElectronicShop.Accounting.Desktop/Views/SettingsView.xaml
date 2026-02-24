@@ -1,0 +1,510 @@
+<UserControl x:Class="ElectronicShop.Accounting.Desktop.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="6">
+            <StackPanel>
+                <TextBlock Style="{StaticResource PageTitleStyle}"
+                           Text="Settings" />
+                <TextBlock Margin="0,4,0,16"
+                           Style="{StaticResource PageSubtitleStyle}"
+                           Text="Manage your business settings and preferences" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                            Style="{StaticResource SurfaceCardStyle}"
+                            Margin="0,0,12,0">
+                        <StackPanel>
+                            <Button HorizontalContentAlignment="Left"
+                                    Margin="0,0,0,8"
+                                    Command="{Binding SelectCompanyProfileCommand}"
+                                    Content="Company Profile">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TabButtonStyle}" TargetType="Button">
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedSection}" Value="CompanyProfile">
+                                                <Setter Property="Background" Value="#16191E" />
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left"
+                                    Margin="0,0,0,8"
+                                    Command="{Binding SelectAccountsManagementCommand}"
+                                    Content="Accounts Management">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TabButtonStyle}" TargetType="Button">
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedSection}" Value="AccountsManagement">
+                                                <Setter Property="Background" Value="#16191E" />
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left"
+                                    Margin="0,0,0,8"
+                                    Command="{Binding SelectUserManagementCommand}"
+                                    Content="User Management">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TabButtonStyle}" TargetType="Button">
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedSection}" Value="UserManagement">
+                                                <Setter Property="Background" Value="#16191E" />
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left"
+                                    Command="{Binding SelectBackupSecurityCommand}"
+                                    Content="Backup &amp; Security">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TabButtonStyle}" TargetType="Button">
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedSection}" Value="BackupSecurity">
+                                                <Setter Property="Background" Value="#16191E" />
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Grid.Column="1">
+                        <Border Visibility="{Binding IsCompanyProfileVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Style="{StaticResource SurfaceCardStyle}">
+                            <StackPanel>
+                                <TextBlock FontSize="40"
+                                           FontWeight="Bold"
+                                           Text="Company Profile" />
+                                <TextBlock Foreground="#6C737E"
+                                           Text="Manage your business profile and contact details" />
+
+                                <Border Margin="0,12,0,0"
+                                        Padding="14"
+                                        BorderBrush="#E2E5EA"
+                                        BorderThickness="1"
+                                        CornerRadius="10">
+                                    <DockPanel>
+                                        <Border Width="90"
+                                                Height="90"
+                                                CornerRadius="10"
+                                                BorderBrush="#D9DDE4"
+                                                BorderThickness="1"
+                                                Background="#F6F7F9" />
+                                        <StackPanel Margin="14,0,0,0">
+                                            <TextBlock FontWeight="SemiBold"
+                                                       Text="Company Logo" />
+                                            <TextBlock Foreground="#6C737E"
+                                                       Margin="0,4,0,8"
+                                                       Text="Upload your company logo for invoices and reports." />
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Style="{StaticResource PrimaryButtonStyle}"
+                                                        Padding="12,8"
+                                                        Margin="0,0,8,0"
+                                                        Content="Upload New Logo" />
+                                                <Button Style="{StaticResource OutlineButtonStyle}"
+                                                        Padding="12,8"
+                                                        Content="Remove" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Border>
+
+                                <TextBlock Margin="0,14,0,4" Text="Company Name" />
+                                <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <Grid Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                        <TextBlock Text="Mobile Number" />
+                                        <TextBox Margin="0,4,0,0" Text="{Binding MobileNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                        <TextBlock Text="Email Address" />
+                                        <TextBox Margin="0,4,0,0" Text="{Binding EmailAddress, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock Margin="0,12,0,4" Text="Address" />
+                                <TextBox Height="72"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"
+                                         Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <DockPanel Margin="0,14,0,0">
+                                    <Button DockPanel.Dock="Right"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Padding="16,10"
+                                            Command="{Binding SaveCompanyProfileCommand}"
+                                            Content="Save" />
+                                    <Button DockPanel.Dock="Right"
+                                            Style="{StaticResource OutlineButtonStyle}"
+                                            Padding="16,10"
+                                            Margin="0,0,8,0"
+                                            Content="Cancel" />
+                                </DockPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Visibility="{Binding IsAccountsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Style="{StaticResource SurfaceCardStyle}">
+                            <StackPanel>
+                                <TextBlock FontSize="40"
+                                           FontWeight="Bold"
+                                           Text="Account Management" />
+                                <TextBlock Foreground="#6C737E"
+                                           Text="Manage your chart of accounts and balances" />
+
+                                <ItemsControl Margin="0,12,0,0"
+                                              ItemsSource="{Binding AccountSummaryCards}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Columns="3" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,10,12"
+                                                    Style="{StaticResource SurfaceCardStyle}"
+                                                    Background="{Binding AccentColor}">
+                                                <StackPanel>
+                                                    <TextBlock FontSize="12"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="#5E6572"
+                                                               Text="{Binding Title}" />
+                                                    <TextBlock Margin="0,8,0,0"
+                                                               FontSize="38"
+                                                               FontWeight="Bold"
+                                                               Text="{Binding Amount, StringFormat={}{0:C0}}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <DockPanel Margin="0,0,0,10">
+                                    <Border Width="360"
+                                            Height="40"
+                                            CornerRadius="8"
+                                            BorderBrush="#DEE2E8"
+                                            BorderThickness="1"
+                                            Background="#FFFFFF">
+                                        <DockPanel Margin="12,0">
+                                            <TextBlock VerticalAlignment="Center"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       Foreground="#81868F"
+                                                       Text="&#xE721;" />
+                                            <TextBox Margin="8,0,0,0"
+                                                     BorderThickness="0"
+                                                     Background="Transparent"
+                                                     VerticalContentAlignment="Center"
+                                                     Text="Search account name or type..." />
+                                        </DockPanel>
+                                    </Border>
+                                    <Button DockPanel.Dock="Right"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Padding="16,10"
+                                            Content="+ Add Account"
+                                            Command="{Binding OpenAddAccountCommand}" />
+                                </DockPanel>
+
+                                <DataGrid Style="{StaticResource DataGridStyle}"
+                                          IsReadOnly="True"
+                                          ItemsSource="{Binding LedgerAccounts}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Account Name" Binding="{Binding AccountName}" Width="1.6*" />
+                                        <DataGridTextColumn Header="Account Type" Binding="{Binding AccountType}" Width="1*" />
+                                        <DataGridTextColumn Header="Opening Balance" Binding="{Binding OpeningBalance, StringFormat={}{0:C0}}" Width="1.1*" />
+                                        <DataGridTextColumn Header="Created Date" Binding="{Binding CreatedDate}" Width="1*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <Border Margin="0,12,0,0"
+                                        Padding="12"
+                                        CornerRadius="10"
+                                        Background="#F4F6F8">
+                                    <TextBlock Foreground="#6C737E"
+                                               Text="Important Note: deleting an account is possible only if it has no transaction history." />
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Visibility="{Binding IsUsersVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Style="{StaticResource SurfaceCardStyle}">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,10">
+                                    <StackPanel DockPanel.Dock="Left">
+                                        <TextBlock FontSize="40"
+                                                   FontWeight="Bold"
+                                                   Text="User Management" />
+                                        <TextBlock Foreground="#6C737E"
+                                                   Text="Manage users, roles and access status" />
+                                    </StackPanel>
+                                    <Button DockPanel.Dock="Right"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Padding="16,10"
+                                            Content="+ Add New User"
+                                            Command="{Binding OpenAddUserCommand}" />
+                                </DockPanel>
+
+                                <Border Width="360"
+                                        Height="40"
+                                        CornerRadius="8"
+                                        BorderBrush="#DEE2E8"
+                                        BorderThickness="1"
+                                        Background="#FFFFFF"
+                                        Margin="0,0,0,10">
+                                    <DockPanel Margin="12,0">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   Foreground="#81868F"
+                                                   Text="&#xE721;" />
+                                        <TextBox Margin="8,0,0,0"
+                                                 BorderThickness="0"
+                                                 Background="Transparent"
+                                                 VerticalContentAlignment="Center"
+                                                 Text="Search users by name, email, or role..." />
+                                    </DockPanel>
+                                </Border>
+
+                                <DataGrid Style="{StaticResource DataGridStyle}"
+                                          IsReadOnly="True"
+                                          ItemsSource="{Binding AppUsers}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="User Name" Binding="{Binding UserName}" Width="1.6*" />
+                                        <DataGridTextColumn Header="Mobile Number" Binding="{Binding MobileNumber}" Width="1.2*" />
+                                        <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="1*" />
+                                        <DataGridCheckBoxColumn Header="Status" Binding="{Binding IsActive}" Width="0.8*" />
+                                        <DataGridTextColumn Header="Email" Binding="{Binding EmailAddress}" Width="1.6*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Visibility="{Binding IsBackupVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Style="{StaticResource SurfaceCardStyle}">
+                            <StackPanel>
+                                <TextBlock FontSize="40"
+                                           FontWeight="Bold"
+                                           Text="Backup &amp; Restore" />
+                                <TextBlock Foreground="#6C737E"
+                                           Text="Manage your database security, schedules and recovery points" />
+
+                                <Border Margin="0,12,0,0"
+                                        Padding="12"
+                                        CornerRadius="10"
+                                        BorderBrush="#E2E5EA"
+                                        BorderThickness="1"
+                                        Background="#FFFFFF">
+                                    <StackPanel>
+                                        <TextBlock Foreground="#4F8C65"
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding BackupCurrentStatus}" />
+                                        <TextBlock Margin="0,6,0,0"
+                                                   FontWeight="Bold"
+                                                   Text="{Binding LastSuccessfulBackup, StringFormat=Last Successful Backup: {0}}" />
+                                        <TextBlock Margin="0,4,0,0"
+                                                   Foreground="#6C737E"
+                                                   Text="{Binding NextScheduledBackup, StringFormat=Next scheduled backup: {0}}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Margin="0,12,0,0"
+                                        Padding="12"
+                                        CornerRadius="10"
+                                        BorderBrush="#E2E5EA"
+                                        BorderThickness="1"
+                                        Background="#FFFFFF">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Left">
+                                            <TextBlock FontSize="22"
+                                                       FontWeight="Bold"
+                                                       Text="Auto Backup" />
+                                            <TextBlock Foreground="#6C737E"
+                                                       Text="Automatically back up your data daily at midnight (UTC)." />
+                                        </StackPanel>
+                                        <CheckBox DockPanel.Dock="Right"
+                                                  Margin="10,0,0,0"
+                                                  VerticalAlignment="Center"
+                                                  IsChecked="{Binding AutoBackupEnabled, Mode=TwoWay}" />
+                                    </DockPanel>
+                                </Border>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,12,0,0">
+                                    <Button Style="{StaticResource PrimaryButtonStyle}"
+                                            Padding="16,10"
+                                            Margin="0,0,8,0"
+                                            Content="Backup Now"
+                                            Command="{Binding RunBackupNowCommand}" />
+                                    <Button Style="{StaticResource OutlineButtonStyle}"
+                                            Padding="16,10"
+                                            Content="Restore Data"
+                                            Command="{Binding RunRestoreCommand}" />
+                                </StackPanel>
+
+                                <TextBlock Margin="0,14,0,8"
+                                           FontSize="28"
+                                           FontWeight="Bold"
+                                           Text="Recent Activity" />
+                                <DataGrid Style="{StaticResource DataGridStyle}"
+                                          IsReadOnly="True"
+                                          ItemsSource="{Binding BackupLogs}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Activity" Binding="{Binding Activity}" Width="1.8*" />
+                                        <DataGridTextColumn Header="Date &amp; Time" Binding="{Binding DateAndTime}" Width="1.3*" />
+                                        <DataGridTextColumn Header="Size" Binding="{Binding Size}" Width="0.8*" />
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="0.8*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Background="#77000000"
+                Visibility="{Binding IsAddAccountOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Width="580"
+                    Padding="22"
+                    CornerRadius="12"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="#FFFFFF">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock FontSize="30"
+                                   FontWeight="Bold"
+                                   Text="Add New Account" />
+                        <Button DockPanel.Dock="Right"
+                                Width="32"
+                                Height="32"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding CloseAddAccountCommand}"
+                                Content="✕" />
+                    </DockPanel>
+
+                    <TextBlock Margin="0,14,0,4" Text="Account Name" />
+                    <TextBox Text="{Binding NewAccountName, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Margin="0,12,0,4" Text="Account Type" />
+                    <TextBox Text="{Binding NewAccountType, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Opening Balance" />
+                            <TextBox Margin="0,4,0,0" Text="{Binding NewAccountOpeningBalance, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="As of Date" />
+                            <TextBox Margin="0,4,0,0" Text="{Binding NewAccountAsOfDate, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <DockPanel Margin="0,16,0,0">
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Padding="16,10"
+                                Content="Save Account"
+                                Command="{Binding SaveAddAccountCommand}" />
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Padding="16,10"
+                                Margin="0,0,8,0"
+                                Content="Cancel"
+                                Command="{Binding CloseAddAccountCommand}" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <Border Background="#77000000"
+                Visibility="{Binding IsAddUserOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Width="580"
+                    Padding="22"
+                    CornerRadius="12"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="#FFFFFF">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock FontSize="30"
+                                   FontWeight="Bold"
+                                   Text="Add New User" />
+                        <Button DockPanel.Dock="Right"
+                                Width="32"
+                                Height="32"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding CloseAddUserCommand}"
+                                Content="✕" />
+                    </DockPanel>
+
+                    <TextBlock Margin="0,14,0,4" Text="User Name" />
+                    <TextBox Text="{Binding NewUserName, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Margin="0,12,0,4" Text="Email Address" />
+                    <TextBox Text="{Binding NewUserEmail, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Margin="0,12,0,4" Text="Mobile Number" />
+                    <TextBox Text="{Binding NewUserMobileNumber, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Margin="0,12,0,4" Text="Password" />
+                    <TextBox Text="{Binding NewUserPassword, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Margin="0,12,0,4" Text="User Role" />
+                    <TextBox Text="{Binding NewUserRole, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <DockPanel Margin="0,16,0,0">
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Padding="16,10"
+                                Content="Save User"
+                                Command="{Binding SaveAddUserCommand}" />
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Padding="16,10"
+                                Margin="0,0,8,0"
+                                Content="Cancel"
+                                Command="{Binding CloseAddUserCommand}" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,50 @@
+<Application x:Class="ElectronicShop.Accounting.Desktop.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:ElectronicShop.Accounting.Desktop.ViewModels"
+             xmlns:views="clr-namespace:ElectronicShop.Accounting.Desktop.Views"
+             ShutdownMode="OnMainWindowClose">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}">
+                <views:DashboardView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:BillingInvoicesViewModel}">
+                <views:BillingInvoicesView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:InventoryViewModel}">
+                <views:InventoryView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:BankingViewModel}">
+                <views:BankingView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:VendorsPurchasesViewModel}">
+                <views:VendorsPurchasesView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:ExpensesViewModel}">
+                <views:ExpensesView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:ReportsViewModel}">
+                <views:ReportsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+                <views:SettingsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:PlaceholderViewModel}">
+                <views:PlaceholderView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
