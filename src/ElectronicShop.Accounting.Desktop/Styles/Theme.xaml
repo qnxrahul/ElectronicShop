@@ -147,8 +147,8 @@
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="RowHeight" Value="46" />
         <Setter Property="MinRowHeight" Value="46" />
-        <Setter Property="MaxWidth" Value="1097" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Width" Value="1097" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
     </Style>
 
     <Style TargetType="DataGridColumnHeader">
