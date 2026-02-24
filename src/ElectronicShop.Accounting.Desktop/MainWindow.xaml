@@ -7,10 +7,11 @@
         MinWidth="1200"
         MinHeight="760"
         WindowStartupLocation="CenterScreen"
+        FontFamily="{StaticResource AppFontFamily}"
         Background="{StaticResource AppBackgroundBrush}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="262" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
