@@ -176,14 +176,12 @@
         <Setter Property="Height" Value="46" />
         <Setter Property="MinHeight" Value="46" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Style.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#EEF2F7" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <Style TargetType="DataGridCell">
+        <Setter Property="Height" Value="46" />
+        <Setter Property="MinHeight" Value="46" />
+        <Setter Property="Opacity" Value="1" />
         <Setter Property="Padding" Value="14,0" />
         <Setter Property="Background" Value="#FFFFFF" />
         <Setter Property="BorderBrush" Value="#E3E5E9" />
@@ -195,6 +193,21 @@
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="TextBlock.LineHeight" Value="13" />
         <Setter Property="TextBlock.LineStackingStrategy" Value="BlockLineHeight" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10"
+                            Margin="1">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="#EEF2F7" />
